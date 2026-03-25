@@ -8,7 +8,7 @@
 body {
     text-align: center;
     background: linear-gradient(to right, #ffdde1, #ee9ca7);
-    font-family: Arial;
+    font-family: Arial, sans-serif;
     overflow: hidden;
     color: #333;
 }
@@ -47,6 +47,7 @@ button {
 #yes { background: #ff4d6d; color: white; }
 #no { background: #333; color: white; position: absolute; }
 
+/* محتوى رئيسي */
 #content { display: none; margin-top: 50px; }
 
 img {
@@ -54,6 +55,34 @@ img {
     border-radius: 20px;
     margin: 10px;
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+/* عرض أسماء وصوركم */
+#people {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+#people div {
+    text-align: center;
+}
+
+#together img {
+    width: 250px;
+    margin-top: 10px;
+}
+
+#together {
+    display: none;
+    margin-top: 20px;
+    animation: fadeIn 1s ease-in-out forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
 }
 </style>
 </head>
@@ -79,9 +108,23 @@ img {
 
     <h2 id="timer"></h2>
 
-    <div>
-        <img src="photo1.jpg">
-        <img src="photo2.jpg">
+    <!-- أسماءكم وصوركم -->
+    <div id="people">
+        <div>
+            <h3>Hazem</h3>
+            <img id="myPhoto" src="hazem.jpeg" alt="Hazem" onclick="showTogether()">
+        </div>
+        <div>
+            <h3>Hanona</h3>
+            <img id="herPhoto" src="hanona.jpeg" alt="Hanona" onclick="showTogether()">
+        </div>
+    </div>
+
+    <!-- الصورة الثالثة تظهر بعد الضغط -->
+    <div id="together">
+        <h3>احنا سوا 😍</h3>
+        <img src="together.jpeg" alt="Us">
+        <p>أنا وانتِ دايمًا سوا ❤️</p>
     </div>
 </div>
 
@@ -93,8 +136,8 @@ img {
 
 // الرسالة
 let text = "sorrry ya hanona about anything 🥹❤️\nYou are the most beautiful thing in my life.\nAnd no matter what happens, I will always choose you ❤️";
-
 let i = 0;
+
 function typeWriter() {
     if (i < text.length) {
         document.getElementById("loveMsg").innerHTML += text.charAt(i);
@@ -106,10 +149,8 @@ function typeWriter() {
 // الهروب
 function moveBtn() {
     let btn = document.getElementById("no");
-
     let x = Math.random() * (window.innerWidth - btn.offsetWidth);
     let y = Math.random() * (window.innerHeight - btn.offsetHeight);
-
     btn.style.left = x + "px";
     btn.style.top = y + "px";
 }
@@ -142,22 +183,34 @@ function startHearts() {
     }, 300);
 }
 
-// التايمر
+// التايمر بالسنين والأشهر والأيام
 let loveDate = new Date("2022-03-26");
 
 function updateTimer() {
     let now = new Date();
-    let diff = now - loveDate;
+    
+    let years = now.getFullYear() - loveDate.getFullYear();
+    let months = now.getMonth() - loveDate.getMonth();
+    let days = now.getDate() - loveDate.getDate();
 
-    let days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    let hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-    let minutes = Math.floor((diff / (1000 * 60)) % 60);
+    if (days < 0) {
+        months--;
+        days += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+    }
+    if (months < 0) {
+        years--;
+        months += 12;
+    }
 
     document.getElementById("timer").innerHTML =
-        "من 26/3/2022 عدّى " + days + " يوم ❤️";
+        `من 26/3/2022 عدّى ${years} سنة و ${months} شهر و ${days} يوم ❤️`;
 }
-
 setInterval(updateTimer, 1000);
+
+// عرض الصورة الثالثة عند الضغط
+function showTogether() {
+    document.getElementById("together").style.display = "block";
+}
 
 </script>
 
